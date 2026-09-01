@@ -12,7 +12,8 @@ export default async function DashboardLayout({
 
     return (
         <SidebarProvider defaultOpen={defaultOpen}
-        className="h-svh">
+        className="h-svh"
+        style={{"--sidebar-width": "15rem"} as React.CSSProperties}>
             <DashboardSidebar/>
             <SidebarInset className="min-h-0 min-w-0">
                 <main className="flex min-h-0 flex-1 flex-col">

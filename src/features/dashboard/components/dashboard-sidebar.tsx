@@ -48,7 +48,7 @@ interface NavSectionProps{
 
 function NavSection({label,items,pathname}:NavSectionProps){
 return (
-    <SidebarGroup>
+    <SidebarGroup className="p-2">
         {label && (
             <SidebarGroupLabel className="text-[13px] uppercase text-muted-foreground">
                 {label}
@@ -59,6 +59,8 @@ return (
                 {items.map((item)=>(
                     <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton
+                        className="h-9 rounded-md px-3 py-2 text-[13px] tracking-tight font-medium border border-transparent data-[active=true]:border-border data-[active=true]:shadow-[0px_1px_1px_0px_rgba(44,54,53,0.03),inset_0px_0px_2px_white] [&_svg]:size-3"
+                        
                         render={item.url ? <Link href={item.url} /> : undefined}
                         isActive={
                             item.url
@@ -70,17 +72,8 @@ return (
                         onClick={item.onClick}
                         tooltip={item.title}
                         >
-                            {item.url ? (
-                                <Link href={item.url}>
-                                    <item.icon />
-                                    <span>{item.title}</span>
-                                </Link>
-                            ):(
-                                <>
-                                <item.icon/>
-                                <span>{item.title}</span>
-                                </>
-                            )}
+                            <item.icon />
+                            <span>{item.title}</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 ))}
@@ -130,23 +123,86 @@ export function DashboardSidebar(){
     ];
 
     return (
-        <Sidebar collapsible="icon">
-            <SidebarHeader className="flex flex-col gap-4 pt-4">
+        <Sidebar collapsible="icon" className="border-r border-sidebar-border">
+            <SidebarHeader className="flex flex-col gap-2 px-2 py-2">
                 <div
                 className="flex items-center gap-2 pl-1 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:pl-0">
                     <Image
                     src="/logo.svg"
                     alt="Resonance logo"
-                    width={24}
-                    height={24}
+                    width={14}
+                    height={14}
                     className="rounded-sm"
                     />
-                    <span className="group-data-[collapsible=icon]:hidden font-semibold text-lg tracking-tighter text-foreground">
+                    <span className="font-semibold text-[10px] tracking-tight text-foreground group-data-[collapsible=icon]:hidden">
                         Resonance
                     </span>
-                    <SidebarTrigger className="ml-auto lg:hidden"/>
+                    <SidebarTrigger className="ml-auto size-6 lg:hidden"/>
                 </div>
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <OrganizationSwitcher
+                        hidePersonal
+                        fallback={
+                            <Skeleton
+                            className="h-8.5 w-full group-data-[collapsible=icon]:size-8 rounded-md border  bg-white"
+                            />
+                        }
+                        appearance={{
+                            elements:{
+                                rootBox:
+                                "!w-full group-data-[collapsible=icon]:!w-auto group-data-[collapsible=icon]:!flex group-data-[collapsible=icon]:!justify-center",
+                                organizationSwitcherTrigger:
+                                "!w-full !justify-between !bg-white !border !border-border !rounded-md !pl-1 !pr-2 !py-1 !gap-3 group-data-[collapsible=icon]:!w-auto group-data-[collapsible=icon]:!p-1",
+                                organizationPreview:"!gap-2",
+                                organizationPreviewAvatarBox:"!size-6 !rounded-sm",
+                                organizationPreviewTextContainer:"!text-xs !tracking-tight !font-medium !text-foreground group-data-[collapsible=icon]:!hidden",
+                                organizationPreviewIdentifier:"!text-[13px]",
+                                organizationSwitcherTriggerIcon:"!size-4 !text-sidebar-foreground group-data-[collapsible=icon]:!hidden",
+                            }
+                        }}
+                        />
+                    </SidebarMenuItem>
+                </SidebarMenu>
             </SidebarHeader>
+            <div className="border-b border-dashed border-border"/>
+            <SidebarContent className="p-0">
+                <NavSection items={mainMennuItems} pathname={pathname}/>
+                <NavSection 
+                label="Others"
+                items={otherMenuItems}
+                pathname={pathname}
+                />
+            </SidebarContent>
+            <div className="border-b border-dashed border-border"/>
+            <SidebarFooter className="gap-3 py-3">
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <UserButton
+                        showName
+                        fallback={
+                            <Skeleton
+                            className="h-8.5 w-full group-data-[collapsible=icon]:size-8 rounded-md border border-border bg-white"
+                            />
+                        }
+                        appearance={{
+                            elements:{
+                                rootBox:
+                                "w-ful! group-data-[collapsible=icon]:w-auto! group-data-[collapsible=icon]:flex! group-data-[collapsible=icon]:justify-center!",
+                                userButtonTrigger:
+                                "w-full! justify-between! bg-white! border! border-border! rounded-md! pl-1! pr-2! py-1! shadow-[0px_1px_1.5px_0px_rgba(44,54,53,0.03)]! group-data-[collapsible=icon]:w-auto! group-data-[collapsible=icon]:p-1! group-data-[collapsible=icon]:after:hidden!",
+                                userButtonBox:"flex-row-reverse! gap-2!",
+                                userButtonOuterIdentifier:
+                                "text-[13px]! tracking-tight! font-medium! text-foreground! pl-0!  group-data-[collapsible=icon]:hidden!",
+                                userButtonOuterAvatarBox:"size-6!"
+                                
+                            }
+                        }}
+                        />
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarFooter>
+            <SidebarRail/>
         </Sidebar>
     )
 }
