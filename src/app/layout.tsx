@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toast";
 import { ClerkProvider } from "@clerk/nextjs";
+import { TRPCReactProvider } from "@/trpc/client";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -32,6 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
+      <TRPCReactProvider>
       <html lang="en" className={cn("font-sans", inter.variable)}>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -40,6 +42,7 @@ export default function RootLayout({
         <Toaster/>
       </body>
     </html>
+    </TRPCReactProvider>
     </ClerkProvider>
   );
 }
