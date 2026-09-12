@@ -5,7 +5,7 @@ export const CANONICAL_SYSTEM_VOICE_SCOPES = [
     "Andy",
     "Archer",
     "Brian",
-    "Chole",
+    "Chloe",
     "Dylan",
     "Emmanuel",
     "Ethan",
