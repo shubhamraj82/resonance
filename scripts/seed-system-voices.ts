@@ -19,7 +19,7 @@ const SYSTEN_VOICES_DIR = path.join(
 );
 
 const envSchema = z.object({
-    DATABSE_URL: z.string().min(1),
+    DATABASE_URL: z.string().min(1),
     R2_ACCOUNT_ID: z.string().min(1),
     R2_ACCESS_KEY_ID: z.string().min(1),
     R2_SECRET_ACCESS_KEY: z.string().min(1),
@@ -28,7 +28,7 @@ const envSchema = z.object({
 
 const env = envSchema.parse(process.env);
 
-const adapter=new PrismaPg({connectionString:env.DATABSE_URL});
+const adapter=new PrismaPg({connectionString:env.DATABASE_URL});
 const prisma = new PrismaClient({adapter});
 
 const r2 = new S3Client({
@@ -78,7 +78,7 @@ const systemVoiceMetadata:Record<string, VoiceMetadata> = {
         category:"CUSTOMER_SERVICE",
         language:"en-US"
     },
-    Chole:{
+    Chloe:{
         description:"Bright and bubbly with a cheerful,outing personality",
         category:"CORPORATE",
         language:"en-AU"
