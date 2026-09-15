@@ -4,6 +4,8 @@
  * Usage:
  * CHATTERBOX_API_URL=https://your-api-url npm run sync-api
  */
+import "dotenv/config";
+
 import fs from "node:fs";
 import path from "node:path";
 import {fileURLToPath} from "node:url";
@@ -14,7 +16,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUTPUT_PATH=path.resolve(__dirname, "../src/types/chatterbox-api.ts");
 
 async function main() {
-    const apiUrl=process.env.CHATTERBOX_API_URL;
+    const apiUrl=process.env.CHATTERBOX_API_URL?.trim();
 
     if(!apiUrl) {
         console.error("CHATTERBOX_API_URL is not set. Please set it in your environment variables.");
