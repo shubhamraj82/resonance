@@ -95,15 +95,20 @@ export const generationsRouter=createTRPCRouter({
     });
 
     if(error){
+        console.error("Chatterbox generate failed:", error);
+
         throw new TRPCError({
             code:"INTERNAL_SERVER_ERROR",
-            message:"Failed to generate speech",
+            message:
+                typeof error === "object" && error && "detail" in error
+                    ? String(error.detail)
+                    : "Failed to generate speech",
         });
     }
     if(!(data instanceof ArrayBuffer)){
         throw new TRPCError({
             code:"INTERNAL_SERVER_ERROR",
-            message:"Invalid auio response",
+            message:"Invalid audio response",
         });
     }
 
@@ -141,7 +146,9 @@ export const generationsRouter=createTRPCRouter({
                 r2ObjectKey,
             },
         });
-    } catch{
+    } catch(error){
+        console.error("Failed to store generated audio:", error);
+
         if(generationId){
             await prisma.generation.delete({
                 where:{id:generationId},

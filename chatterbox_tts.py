@@ -56,7 +56,7 @@ with image.imports():
     class TTSRequest(BaseModel):
         """Request model for text-to-speech generation."""
         
-        prompt:str=Field(...,min_length=1,max_length=500)
+        prompt:str=Field(...,min_length=1,max_length=5000)
         voice_key:str=Field(...,min_length=1,max_length=300)
         temperature:float=Field(default=0.8, ge=0.0, le=2.0)
         top_p:float=Field(default=0.95, ge=0.0, le=2.0)
