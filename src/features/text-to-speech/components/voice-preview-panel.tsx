@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import {Pause,Play,Download,Redo,Undo} from "lucide-react";
-import {format} from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Spinner } from "@/components/ui/spinner";
 import {Button} from "@/components/ui/button";
@@ -16,7 +15,11 @@ type VoicePreviewPanelVoice ={
 };
 
 function formatTime(seconds:number):string{
-    return format(new Date(seconds * 1000), "mm:ss");
+    const safeSeconds=Number.isFinite(seconds) ? Math.max(0,Math.floor(seconds)) : 0;
+    const minutes=Math.floor(safeSeconds / 60);
+    const remainingSeconds=safeSeconds % 60;
+
+    return `${String(minutes).padStart(2,"0")}:${String(remainingSeconds).padStart(2,"0")}`;
 }
 
 export function VoicePreviewPanel({
