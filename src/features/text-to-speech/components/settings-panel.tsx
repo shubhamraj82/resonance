@@ -5,7 +5,7 @@ Tabs, TabsContent, TabsList, TabsTrigger
 import {SettingsPanelHistory} from "@/features/text-to-speech/components/settings-panel-history";
 import {SettingsPanelSettings} from "@/features/text-to-speech/components/settings-panel-settings";
 
-const tabsTriggerClassName="flex-1 h-full gap-2 bg-transparent rounded-none border-x-0 border-t-0 border-b-px bg-b-transparent shadow-none data-[state=active]:border-b-foreground group data-[variant=default]/tabs-list:data-[state=active]:shadow-none"
+const tabsTriggerClassName="m-1 h-10 flex-1 gap-2 rounded-md border! border-transparent! bg-transparent shadow-none transition-[background-color,border-color,box-shadow,transform] data-active:border-zinc-400! data-active:bg-zinc-50 data-active:shadow-[inset_1px_1px_0_rgba(255,255,255,1),inset_-1px_-1px_0_rgba(0,0,0,0.14),0_2px_5px_rgba(15,23,42,0.16)] data-active:[transform:translateY(-1px)] group data-[variant=default]/tabs-list:data-active:shadow-[inset_1px_1px_0_rgba(255,255,255,1),inset_-1px_-1px_0_rgba(0,0,0,0.14),0_2px_5px_rgba(15,23,42,0.16)]"
 
 export function SettingsPanel(){
     return (

@@ -59,7 +59,7 @@ return (
                 {items.map((item)=>(
                     <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton
-                        className="h-9 rounded-md px-3 py-2 text-[13px] tracking-tight font-medium border border-transparent data-[active=true]:border-border data-[active=true]:shadow-[0px_1px_1px_0px_rgba(44,54,53,0.03),inset_0px_0px_2px_white] [&_svg]:size-3"
+                        className="h-9 rounded-md border border-transparent px-3 py-2 text-[13px] font-medium tracking-tight transition-[background-color,border-color,box-shadow,transform] data-active:border-zinc-400 data-active:bg-zinc-50 data-active:shadow-[inset_1px_1px_0_rgba(255,255,255,1),inset_-1px_-1px_0_rgba(0,0,0,0.14),0_2px_5px_rgba(15,23,42,0.16)] data-active:[transform:translateY(-1px)] [&_svg]:size-3"
                         
                         render={item.url ? <Link href={item.url} /> : undefined}
                         isActive={
