@@ -7,6 +7,7 @@ import { VoiceAvatar } from "@/components/voice-avatar/voice-avatar";
 import type {inferRouterOutputs} from "@trpc/server";
 import type {AppRouter} from "@/trpc/routers/_app";
 import { VOICE_CATEGORY_LABELS } from "../data/voice-categories";
+import { useAudioPlayback } from "@/hooks/use-audio-playback";
 
 export type VoiceItem = inferRouterOutputs<AppRouter>["voices"]["getAll"]["custom"][number];
 
@@ -28,10 +29,9 @@ function parseLanguage(locale:string){
 };
 
 export function VoiceCard({voice}:VoiceCardsProps){
-    const isLoading=false;
-    const isPlaying=false;
     const {flag,region}=parseLanguage(voice.language);
     const audioSrc=`/api/voices/${encodeURIComponent(voice.id)}`;
+    const {isPlaying,isLoading,togglePlay}=useAudioPlayback(audioSrc);
 
 return (
     <div className="flex items-center gap-1 overflow-hidden rounded-xl border pr-3 lg:pr-6">
@@ -69,7 +69,7 @@ return (
             variant="outline"
             size="icon-sm"
             className="rounded-full"
-            onClick={()=>{}}
+            onClick={()=>{togglePlay()}}
             disabled={isLoading}
             >
                 {isLoading ? (

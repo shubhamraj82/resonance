@@ -5,6 +5,7 @@ import {Search, Sparkles} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {InputGroup,InputGroupInput,InputGroupAddon} from "@/components/ui/input-group";
 import {voiceSearchParams} from "../lib/param";
+import { VoiceCreateDialog } from "./voice-create-dialog";
 
 export  function VoicesToolbar(){
     const [query,setQuery] = useQueryState("query",voiceSearchParams.query);
@@ -37,16 +38,20 @@ export  function VoicesToolbar(){
                     />
                     </InputGroup>
                     <div className="ml-auto hidden lg:block">
+                        <VoiceCreateDialog>
                         <Button size="sm">
                             <Sparkles/>
                             Custom Voices
                         </Button>
+                        </VoiceCreateDialog>
                     </div>
                     <div className="lg:hidden">
+                        <VoiceCreateDialog>
                         <Button size="sm" className="w-full">
                             <Sparkles/>
                             Custom Voices
                         </Button>
+                        </VoiceCreateDialog>
                     </div>
                 </div>
             </div>
