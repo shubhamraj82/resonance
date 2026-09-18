@@ -94,7 +94,74 @@ function FileDropzone({
         }
     })
 
-    
+    if(file){
+      return (
+        <div className="flex items-center gap-3 rounded-xl border p-4">
+          <div className="flex size-10 items-center justify-center rounded-lg bg-muted">
+            <FileAudio className="size-5 text-muted-foreground"/>
+          </div>
+
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-xs font-medium">{file.name}</p>
+            <p className="text-xs text-muted-foreground">{formatFileSize(file.size)} bytes</p>
+          </div>
+          <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={togglePlay}
+          >
+            {isPlaying ? (
+              <Pause className="size-4"/>
+            ):(
+              <Play className="size-4"/>
+            )}
+          </Button>
+          <Button
+          variant="ghost"
+          type="button"
+          size="icon-sm"
+          onClick={()=>onFileChange(null)}
+          >
+            <X className="size-4"/>
+          </Button>
+        </div>
+      );
+    }
+
+    return (
+      <div 
+      {...getRootProps()}
+      className={cn(
+        "flex cursor-pointer flex-col items-center justify-center gap-4 overflow-hidden rounded-2xl border px-6 py-10 transition-colors",
+        isDragReject || isInvalid
+        ? "border-destructive"
+        : isDragActive
+        ? "border-primary"
+        : "",
+      )}
+      >
+        <input {...getInputProps()} />
+        <div className="flex size-12 items-center justify-center rounded-xl bg-muted">
+          <AudioLines className="size-5 text-muted-foreground"/>
+        </div>
+        <div className="flex flex-col items-center gap-1.5">
+          <p className="text-base font-semibold tracking-tight">
+            Upload youur audio file
+          </p>
+
+          <p className="text-center text-sm text-muted-foreground">
+            Supports all audio formats, max size 20MB
+          </p>
+        </div>
+
+        <Button type="button" variant="outline" size="sm">
+          <FolderOpen className="size-3.5"/>
+          Upload file
+        </Button>
+      </div>
+    )
+
 }
 
 function LanguageCombobox({
@@ -297,7 +364,11 @@ export function VoiceCreateForm({
                                         </TabsTrigger>
                                     </TabsList>
                                     <TabsContent value="upload">
-                                        <p>TODO:File upload</p>
+                                        <FileDropzone
+                                        file={field.state.value}
+                                        onFileChange={field.handleChange}
+                                        isInvalid={IsInvalid}
+                                        />
                                     </TabsContent>
                                 </Tabs>
                                 {IsInvalid && <FieldError errors={field.state.meta.errors} />}
