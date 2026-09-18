@@ -98,7 +98,6 @@ export function VoiceSelector(){
                                     name={v.name}
                                     />
                                     <span className="truncate text-sm font-medium tracking-tight">
-                                {currentVoice.name}
                                 {v.name} - {VOICE_CATEGORY_LABELS[v.category]}
                             </span>
                                 </SelectItem>
@@ -116,7 +115,6 @@ export function VoiceSelector(){
                                     name={v.name}
                                     />
                                     <span className="truncate text-sm font-medium tracking-tight">
-                                {currentVoice.name}
                                 {v.name} - {VOICE_CATEGORY_LABELS[v.category]}
                             </span>
                                 </SelectItem>
