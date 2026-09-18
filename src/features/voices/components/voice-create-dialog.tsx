@@ -21,9 +21,10 @@ import {
 import { useIsMobile } from "@/hooks/use-mobile"
 import { VoiceCreateForm } from "./voice-create-form";
 import { Button } from "@/components/ui/button";
+import type { ReactElement } from "react";
 
 interface VoiceCreateDialogProps{
-    children?:React.ReactNode;
+    children?:ReactElement;
     open?:boolean;
     onOpenChange?:(open:boolean)=>void;
 }
@@ -39,7 +40,7 @@ export function VoiceCreateDialog({
     if(isMobile){
         return (
             <Drawer open={open} onOpenChange={onOpenChange}>
-                {children && <DrawerTrigger asChild>{children}</DrawerTrigger>}
+                {children && <DrawerTrigger render={children} />}
                 <DrawerContent>
                     <DrawerHeader>
                         <DrawerTitle>Create custom voice</DrawerTitle>
@@ -52,9 +53,9 @@ export function VoiceCreateDialog({
                     footer={(submit)=>(
                         <DrawerFooter>
                             {submit}
-                            <DrawerClose asChild>
-                                <Button variant="outline">Cancel</Button>
-                            </DrawerClose>
+                            <DrawerClose
+                                render={<Button variant="outline">Cancel</Button>}
+                            />
                             </DrawerFooter>
                     )}
                     />
@@ -64,7 +65,7 @@ export function VoiceCreateDialog({
     };
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            {children && <DialogTrigger asChild>{children}</DialogTrigger>}
+            {children && <DialogTrigger render={children} />}
             <DialogContent>
                 <DialogHeader className="text-left">
                     <DialogTitle>Create custom voice</DialogTitle>
