@@ -22,7 +22,7 @@ export const billingRouter = createTRPCRouter({
   }),
 
   createPortalSession: orgProcedure.mutation(async ({ ctx }) => {
-    const result = await polar.customerPortalSessions.create({
+    const result = await polar.customerSessions.create({
       externalCustomerId: ctx.orgId,
     });
 
@@ -36,5 +36,31 @@ export const billingRouter = createTRPCRouter({
     return { portalUrl: result.customerPortalUrl };
   }),
 
-  getStatus:
+  getStatus:orgProcedure.query(async({ctx})=> {
+    try{
+        const customerState=await polar.customers.getStateExternal({
+            externalId:ctx.orgId,
+        });
+        const hasActiveSubscription=(customerState.activeSubscriptions ?? []).length>0;
+
+
+        let estimatedCostCents=0;
+        for(const sub of customerState.activeSubscriptions ?? []){
+            for(const meter of sub.meters ?? []){
+                estimatedCostCents+=meter.amount ?? 0;
+            }
+        }
+        return {
+            hasActiveSubscription,
+            customerId:customerState.id,
+            estimatedCostCents,
+        }
+    }catch{
+        return {
+            hasActiveSubscription:false,
+            customerId:null,
+            estimatedCostCents:0,
+        }
+    }
+  })
 })

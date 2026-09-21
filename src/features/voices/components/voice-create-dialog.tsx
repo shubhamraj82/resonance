@@ -22,6 +22,9 @@ import { useIsMobile } from "@/hooks/use-mobile"
 import { VoiceCreateForm } from "./voice-create-form";
 import { Button } from "@/components/ui/button";
 import type { ReactElement } from "react";
+import { useCheckout } from "@/features/billing/hooks/use-checkout";
+import {useCallback} from "react";
+import { toast } from "@/components/ui/toast";
 
 interface VoiceCreateDialogProps{
     children?:ReactElement;
@@ -36,6 +39,27 @@ export function VoiceCreateDialog({
     onOpenChange,
 }:VoiceCreateDialogProps){
     const isMobile=useIsMobile();
+    const {checkout}=useCheckout();
+
+    const handleError= useCallback(
+        (message:string)=>{
+             if(message === "SUBSCRIPTION_REQUIRED"){
+                    toast.add({
+                        title:"Subscription required",
+                        type:"error",
+                        actionProps:{
+                            children:"Subscribe",
+                            onClick:()=>checkout(),
+                        },
+                    });
+                }else{
+                    toast.add({
+                        title:message,
+                        type:"error",
+                    });
+                }
+        },[checkout])
+    
 
     if(isMobile){
         return (
@@ -50,6 +74,7 @@ export function VoiceCreateDialog({
                     </DrawerHeader>
                     <VoiceCreateForm
                     scrollable
+                    onError={handleError}
                     footer={(submit)=>(
                         <DrawerFooter>
                             {submit}
@@ -73,7 +98,7 @@ export function VoiceCreateDialog({
                         upload or record an audio sample to add a new voice to your libraray.
                     </DialogDescription>
                 </DialogHeader>
-                <VoiceCreateForm/>
+                <VoiceCreateForm onError={handleError}/>
             </DialogContent>
         </Dialog>
     )

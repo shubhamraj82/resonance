@@ -2,6 +2,7 @@ import {auth} from "@clerk/nextjs/server";
 import {parseBuffer} from "music-metadata";
 import {z} from "zod";
 import prisma from "@/lib/db";
+import {polar} from "@/lib/polar";
 import {uploadAudio} from "@/lib/r2";
 import {VOICE_CATEGORIES} from "@/features/voices/data/voice-categories";
 import type {VoiceCategory} from "@/generated/prisma/client";
@@ -23,6 +24,22 @@ export async function POST(request:Request){
         return Response.json({error:"Unauthorized"},{status:401});
     }
 
+    try{
+        const customerState=await polar.customers.getStateExternal({
+            externalId:orgId,
+        })
+        const hasActiveSubscription=(customerState.activeSubscriptions ?? []).length>0;
+        if(!hasActiveSubscription){
+            return Response.json({
+                error:"SUBSCRIPTION_REQUIRED",
+            },{status:403});
+        }
+    } catch{
+
+        return Response.json({
+            error:"SUBSCRIPTION_REQUIRED ",
+        },{status:403});
+    }
     const url =new URL(request.url);
 
     const validation = createVoiceSchema.safeParse({
@@ -132,6 +149,21 @@ export async function POST(request:Request){
             {status:500},
         );
     }
+
+    polar.events
+    .ingest({
+        events:[
+            {
+                name:"voice_creation",
+                externalCustomerId:orgId,
+                metadata:{},
+                timestamp:new Date(),
+            }
+        ]
+    })
+    .catch(()=>{
+
+    })
 
     return Response.json(
         {name,message:"Voice created Successfully"},

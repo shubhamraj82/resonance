@@ -32,6 +32,9 @@ import {
     Volume2,
 } from "lucide-react";
 import Link from "next/link";
+import { UsageContainer } from "@/features/billing/components/usage-container";
+import { VoiceCreateDialog } from "@/features/voices/components/voice-create-dialog";
+import { useState } from "react";
 
 interface MenuItem {
     title:string;
@@ -86,6 +89,7 @@ return (
 export function DashboardSidebar(){
     const pathname = usePathname();
     const clerk = useClerk();
+    const [voiceDialogOpen,setVoiceDialogOpen] = useState(false);
 
     const mainMennuItems:MenuItem[]=[
         {
@@ -106,6 +110,7 @@ export function DashboardSidebar(){
         {
             title:"Voice cloning",
             icon:Volume2,
+            onClick:()=>setVoiceDialogOpen(true),
         }
     ];
 
@@ -123,6 +128,11 @@ export function DashboardSidebar(){
     ];
 
     return (
+        <>
+        <VoiceCreateDialog
+        open={voiceDialogOpen}
+        onOpenChange={setVoiceDialogOpen}
+        />
         <Sidebar collapsible="icon" className="border-r border-sidebar-border">
             <SidebarHeader className="flex flex-col gap-2 px-2 py-2">
                 <div
@@ -176,6 +186,7 @@ export function DashboardSidebar(){
             </SidebarContent>
             <div className="border-b border-dashed border-border"/>
             <SidebarFooter className="gap-3 py-3">
+                <UsageContainer/>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <UserButton
@@ -204,5 +215,6 @@ export function DashboardSidebar(){
             </SidebarFooter>
             <SidebarRail/>
         </Sidebar>
+        </>
     )
 }
