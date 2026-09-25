@@ -1,14 +1,16 @@
 import { TRPCError } from "@trpc/server";
 import {polar} from "@/lib/polar";
 import {env} from "@/lib/env";
+import {getPublicAppUrl} from "@/lib/app-url";
 import {createTRPCRouter,orgProcedure} from "../init";
 
 export const billingRouter = createTRPCRouter({
     createCheckout: orgProcedure.mutation(async ({ ctx }) => {
+    const appUrl = await getPublicAppUrl();
     const result = await polar.checkouts.create({
       products: [env.POLAR_PRODUCT_ID],
       externalCustomerId: ctx.orgId,
-      successUrl: process.env.APP_URL,
+      successUrl: `${appUrl}/?checkout_id={CHECKOUT_ID}`,
     });
 
     if (!result.url) {

@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { useTRPC } from "@/trpc/client";
@@ -94,7 +95,26 @@ function UsageCard({ estimatedCostCents }: { estimatedCostCents: number }) {
 
 export function UsageContainer(){
     const trpc = useTRPC();
-    const {data} = useQuery(trpc.billing.getStatus.queryOptions());
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const fromCheckout = Boolean(searchParams.get("checkout_id"));
+
+    const {data} = useQuery({
+        ...trpc.billing.getStatus.queryOptions(),
+        staleTime: fromCheckout ? 0 : 30_000,
+        refetchInterval: (query) => {
+            if (fromCheckout && !query.state.data?.hasActiveSubscription) {
+                return 2000;
+            }
+            return false;
+        },
+    });
+
+    useEffect(() => {
+        if (fromCheckout && data?.hasActiveSubscription) {
+            router.replace("/");
+        }
+    }, [fromCheckout, data?.hasActiveSubscription, router]);
 
     return (
         <div className="group-data-[collapsible=icon]:hidden bg-background border border-border rounded-lg p-3">
